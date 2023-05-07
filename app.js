@@ -11,8 +11,7 @@ const initDbAndServer = async () => {
   try {
     db = await open({
       filename: dbPath,
-      driver: sqlite3,
-      db,
+      driver: sqlite3.Database,
     });
     app.listen(3000, () =>
       console.log("Server Running at http://localhost:3000/")
@@ -40,7 +39,7 @@ app.get("/players/", async (request, response) => {
   const playersArray = await db.all(getPlayersQuery);
   response.send(playersArray.map((each) => covertDbToResponse(each)));
 });
-app.get("/players/", async (request, response) => {
+app.get("/players/:playerId", async (request, response) => {
   const { playerId } = request.params;
   const getPlayerQuery = `
     SELECT
